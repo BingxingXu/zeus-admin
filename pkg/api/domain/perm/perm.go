@@ -6,6 +6,9 @@ import (
 	"github.com/spf13/viper"
 	"sync"
 	"zeus/pkg/api/domain/perm/adapter"
+
+	//gormadapter "github.com/casbin/gorm-adapter/v3"
+	//"zeus/pkg/api/domain/perm/adapter"
 	"zeus/pkg/api/log"
 )
 
@@ -16,7 +19,8 @@ var (
 
 // SetUp permission handler
 func SetUp(cluster bool) {
-	enforcer = casbin.NewEnforcer(viper.GetString("casbin.model.rule_0"), adapter.NewMysqlAdapter())
+	enforcer = casbin.NewEnforcer(viper.GetString("casbin.model.rule_0"), adapter.NewSqlAdapter())
+	//enforcer = casbin.NewEnforcer(viper.GetString("casbin.model.rule_0"), dao.GetCasbinAdapter())
 	if cluster {
 		//Distributed watcher
 		w, _ := rediswatcher.NewWatcher(viper.GetString("redis.host"), rediswatcher.Password(viper.GetString("redis.auth")))

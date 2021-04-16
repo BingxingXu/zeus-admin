@@ -28,17 +28,17 @@ cors:
   enable: false
   max_age: 7200
 database:
-  driver: mysql
-  mysql:
-    charset: utf8
-    host: 127.0.0.1:3306
+  driver: pg
+  pg:
+    host: 127.0.0.1
+    port: 5432
     name: zeus
-    password: root
+    user: postgres
+    password: Laotie666
     pool:
       max: 20
       min: 5
-    ssl: false
-    user: root
+    ssl: disable
   sqlite:
     dsn: data/zeus.db
 dingtalk:
@@ -59,7 +59,7 @@ email:
     server: smtp.163.com
     user: vcoso@163.com
 jwt:
-  expiresat: 3600*24*1
+  expiresat: 3600*24*7
   key:
     private: keys/jwt_private_key.pem
     public: keys/jwt_public_key.pem
@@ -73,9 +73,9 @@ ldap:
   - displayName
   - mail
   authfilter: (&(uid=%s))
-  basedn: dc=bullteam,dc=com
-  binddn: cn=admin,dc=bullteam,dc=com
-  bindpass: zeus@admin#123456
+  basedn: dc=sator,dc=tech
+  binddn: cn=admin,dc=sator,dc=tech
+  bindpass: JonSn0w
   starttls: false
   tls: false
   userdn: cn=admin,dc=bullteam,dc=com
@@ -84,7 +84,7 @@ project:
   merge: true
 redis:
   host: 127.0.0.1:6379
-  auth:
+  auth: sOmE_sEcUrE_pAsS
   db: 0
   pool:
     max: 20

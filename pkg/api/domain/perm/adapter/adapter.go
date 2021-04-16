@@ -14,25 +14,25 @@ type Adapter interface {
 }
 
 // NewMysqlAdapter : delegate of adapter
-func NewMysqlAdapter() *mysqlAdapter {
-	ad := &mysqlAdapter{
+func NewSqlAdapter() *sqlAdapter {
+	ad := &sqlAdapter{
 		a: mysql.NewGormAdapter(),
 	}
 	return ad
 }
 
-type mysqlAdapter struct {
+type sqlAdapter struct {
 	a Adapter
 }
 
-func (ca *mysqlAdapter) LoadPolicy(model model.Model) error { return ca.a.LoadPolicy(model) }
-func (ca *mysqlAdapter) SavePolicy(model model.Model) error { return ca.a.SavePolicy(model) }
-func (ca *mysqlAdapter) AddPolicy(sec string, ptype string, rule []string) error {
+func (ca *sqlAdapter) LoadPolicy(model model.Model) error { return ca.a.LoadPolicy(model) }
+func (ca *sqlAdapter) SavePolicy(model model.Model) error { return ca.a.SavePolicy(model) }
+func (ca *sqlAdapter) AddPolicy(sec string, ptype string, rule []string) error {
 	return ca.a.AddPolicy(sec, ptype, rule)
 }
-func (ca *mysqlAdapter) RemovePolicy(sec string, ptype string, rule []string) error {
+func (ca *sqlAdapter) RemovePolicy(sec string, ptype string, rule []string) error {
 	return ca.a.RemovePolicy(sec, ptype, rule)
 }
-func (ca *mysqlAdapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int, fieldValues ...string) error {
+func (ca *sqlAdapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int, fieldValues ...string) error {
 	return ca.a.RemoveFilteredPolicy(sec, ptype, fieldIndex, fieldValues...)
 }

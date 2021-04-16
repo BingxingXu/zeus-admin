@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/spf13/viper"
 	"zeus/pkg/api/domain/search/adapter/statement"
@@ -16,6 +17,7 @@ var (
 )
 
 const (
+	DRIVER_PG = "pg"
 	DRIVER_MYSQL  = "mysql"
 	DRIVER_SQLITE = "sqlite"
 )
@@ -48,6 +50,26 @@ func Setup() {
 		} else {
 			db.DB().SetMaxIdleConns(viper.GetInt("database.mysql.pool.min"))
 			db.DB().SetMaxOpenConns(viper.GetInt("database.mysql.pool.max"))
+			if gin.Mode() != gin.ReleaseMode {
+				db.LogMode(true)
+			}
+		}
+	case DRIVER_PG:
+		host := viper.GetString("database.pg.host")
+		port := viper.GetString("database.pg.port")
+		user := viper.GetString("database.pg.user")
+		password := viper.GetString("database.pg.password")
+		name := viper.GetString("database.pg.name")
+		ssl := viper.GetString("database.pg.ssl")
+
+		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", host, user, password, name, port, ssl)
+		log.Debug(dsn)
+		db, err = gorm.Open("postgres", dsn)
+		if err != nil {
+			log.Fatal(fmt.Sprintf("Failed to connect postgres %s", err.Error()))
+		} else {
+			db.DB().SetMaxIdleConns(viper.GetInt("database.pg.pool.min"))
+			db.DB().SetMaxOpenConns(viper.GetInt("database.pg.pool.max"))
 			if gin.Mode() != gin.ReleaseMode {
 				db.LogMode(true)
 			}
